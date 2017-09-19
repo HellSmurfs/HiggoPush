@@ -1,6 +1,13 @@
 http = require('http');
 request = require('request');
 
+function logResult(data, error, response, body) {
+  console.log('data:', data)
+  console.log('error:', error);
+  console.log('statusCode:', response && response.statusCode);
+  console.log('body:', body);
+}
+
 function sendCmd(data) {
   var post_data = {
     name: "higgo",
@@ -17,44 +24,35 @@ function sendCmd(data) {
   };
 
   request.post({
-    url: 'http://52.59.237.209/iot13/commands',
+    url: cmdUrl,
     body: open_data,
     json: true
   },
     function (error, response, body) {
-      console.log('data:', open_data)
-      console.log('error:', error); // Print the error if one occurred
-      console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-      console.log('body:', body); // Print the HTML for the Google homepage.
+      logResult(open_data, error, response, body);
     }
   );
 
   setTimeout(function () {
     request.post({
-      url: 'http://52.59.237.209/iot13/commands',
+      url: cmdUrl,
       body: open_data,
       json: true
     },
       function (error, response, body) {
-        console.log('data:', open_data)
-        console.log('error:', error); // Print the error if one occurred
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        console.log('body:', body); // Print the HTML for the Google homepage.
+        logResult(open_data, error, response, body);
       }
     );
   }, 7000)
 
   setTimeout(function () {
     request.post({
-      url: 'http://52.59.237.209/iot13/commands',
+      url: cmdUrl,
       body: post_data,
       json: true
     },
       function (error, response, body) {
-        console.log('data:', post_data)
-        console.log('error:', error); // Print the error if one occurred
-        console.log('statusCode:', response && response.statusCode); // Print the response status code if a response was received
-        console.log('body:', body); // Print the HTML for the Google homepage.
+        logResult(open_data, error, response, body);
       }
     );
   }, 8000)
@@ -78,6 +76,7 @@ server = http.createServer(function (req, res) {
   }
 });
 
+cmdUrl = "http://52.59.237.209/iot13/commands"
 port = 3000;
 host = 'localhost';
 server.listen(port, host);
